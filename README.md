@@ -2,7 +2,7 @@
 
 This is an app to buy Ethereum with USD. It allows users to create an account, connect their bank account via the Plaid, and submit a transaction to buy Ethereum. The project is bootstrapped with Next.js and written in TypeScript using React, clerk, viem, react-query, plaid, and mantine.
 
-The app is deployed on Vercel and can be accessed [here]().
+The app is deployed on Vercel and can be accessed [here](https://eth-exchange-alpha.vercel.app).
 
 ## Instructions to run
 
