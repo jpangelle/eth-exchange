@@ -4,6 +4,8 @@ This is an app to buy Ethereum with USD. It allows users to create an account, c
 
 The app is deployed on Vercel and can be accessed [here](https://eth-exchange-alpha.vercel.app).
 
+![eth-exchange-screenshot](https://i.imgur.com/rf3HQUb.png)
+
 ## Instructions to run
 
 ### Install dependencies
