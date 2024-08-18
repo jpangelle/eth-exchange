@@ -1,0 +1,38 @@
+{
+  "name": "eth-exchange",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^5.2.14",
+    "@mantine/core": "^7.12.0",
+    "@mantine/form": "^7.12.0",
+    "@mantine/hooks": "^7.12.0",
+    "@tanstack/react-query": "^5.51.21",
+    "next": "14.2.5",
+    "plaid": "^26.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-plaid-link": "^3.5.2",
+    "svix": "^1.28.0",
+    "viem": "2.x"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "typescript": "^5",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^9.1.0",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prettier": "3.3.3"
+  }
+}
