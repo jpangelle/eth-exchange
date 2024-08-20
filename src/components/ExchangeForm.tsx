@@ -1,6 +1,6 @@
 "use client";
+import { buyEthereum } from "@/actions";
 import {
-  useBuyEthereum,
   useEthereumBalance,
   useEthereumPrice,
   usePlaidAccounts,
@@ -18,6 +18,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { AccountBase } from "plaid";
+import { useActionState, useEffect } from "react";
 
 export const formatAmount = (value: string) => {
   const formattedValue = value.replace(/,/g, "");
@@ -30,6 +31,13 @@ export const ExchangeForm = () => {
   const { bankAccounts } = usePlaidAccounts();
 
   const { refetchEthereumBalance } = useEthereumBalance();
+
+  const [formState, formAction, isBuyingEthereum] = useActionState<
+    { success: boolean },
+    string
+  >((_, amountETH) => buyEthereum(amountETH), {
+    success: false,
+  });
 
   const { ethereumPrice } = useEthereumPrice();
 
@@ -50,7 +58,7 @@ export const ExchangeForm = () => {
           Number(valueNoCommas) >
           (
             bankAccounts.find(
-              (account) => account.persistent_account_id === values.account
+              (account) => account.persistent_account_id === values.account,
             ) as AccountBase
           ).balances.available!
         )
@@ -68,13 +76,16 @@ export const ExchangeForm = () => {
     },
   });
 
-  const { buyEthereum, isBuyingEthereum, isSuccess } = useBuyEthereum(() => {
-    refetchEthereumBalance();
-    form.setValues({
-      amountUSD: "",
-      amountETH: "",
-    });
-  });
+  useEffect(() => {
+    if (formState?.success) {
+      refetchEthereumBalance();
+      form.setValues({
+        amountUSD: "",
+        amountETH: "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState]);
 
   if (!bankAccounts?.length) {
     return (
@@ -86,7 +97,7 @@ export const ExchangeForm = () => {
 
   return (
     <>
-      <form onSubmit={form.onSubmit((values) => buyEthereum(values.amountETH))}>
+      <form action={() => formAction(form.values.amountETH)}>
         <Stack gap="12">
           <Select
             label="Bank account"
@@ -128,7 +139,7 @@ export const ExchangeForm = () => {
                       (
                         Number(event.target.value.replaceAll(",", "")) /
                         ethereumPrice!
-                      ).toFixed(8)
+                      ).toFixed(8),
                     )
                   : "",
               });
@@ -153,7 +164,7 @@ export const ExchangeForm = () => {
                       (
                         Number(event.target.value.replaceAll(",", "")) *
                         ethereumPrice!
-                      ).toFixed(2)
+                      ).toFixed(2),
                     )
                   : "",
                 amountETH: formatAmount(event.target.value),
@@ -170,11 +181,13 @@ export const ExchangeForm = () => {
           </Button>
         </Flex>
       </form>
-      {isSuccess && !form.values.amountETH && !form.values.amountUSD && (
-        <Center>
-          <Text>Your purchase was successful!</Text>
-        </Center>
-      )}
+      {formState?.success &&
+        !form.values.amountETH &&
+        !form.values.amountUSD && (
+          <Center>
+            <Text>Your purchase was successful!</Text>
+          </Center>
+        )}
     </>
   );
 };

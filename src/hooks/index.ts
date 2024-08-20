@@ -1,6 +1,6 @@
 import { getEthereumBalance } from "@/utilities";
 import { useUser } from "@clerk/nextjs";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AccountBase } from "plaid";
 
@@ -22,44 +22,6 @@ export const usePlaidAccounts = () => {
   });
 
   return { bankAccounts, isFetchingPlaidAccounts, refetchPlaidAccounts };
-};
-
-export const useExchangePublicToken = () => {
-  const { refetchPlaidAccounts } = usePlaidAccounts();
-  const { user } = useUser();
-  const {
-    mutate: exchangePublicToken,
-    isPending: isPendingExchangingPublicToken,
-  } = useMutation({
-    mutationFn: async (publicToken: string) => {
-      await axios.post("/api/exchange-public-token", {
-        publicToken,
-      });
-    },
-    onSuccess: async () => {
-      await user?.reload();
-      await refetchPlaidAccounts();
-    },
-  });
-
-  return { exchangePublicToken, isPendingExchangingPublicToken };
-};
-
-export const useBuyEthereum = (onSuccess: () => void) => {
-  const {
-    mutate: buyEthereum,
-    isPending: isBuyingEthereum,
-    isSuccess,
-  } = useMutation({
-    mutationFn: async (amount: string) => {
-      await axios.post("/api/buy-ethereum", {
-        amount,
-      });
-    },
-    onSuccess,
-  });
-
-  return { buyEthereum, isBuyingEthereum, isSuccess };
 };
 
 export const useEthereumBalance = () => {
